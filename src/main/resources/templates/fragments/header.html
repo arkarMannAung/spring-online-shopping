@@ -8,12 +8,16 @@
 	 		<div class="d-flex flex-row items-center">
 	 			<a th:href="@{/}" class="mx-3 text-light my-auto" style="text-decoration: none;">Home</a>
 	 			<a th:href="@{/order}" class="mx-3 text-light my-auto" style="text-decoration: none;">Order</a>
-	 			<a th:href="@{/}" class="mx-3 position-relative">
+	 			<form th:href="@{/}" class="mx-3 position-relative">
+	 				<!-- add to cart reciever input $("input[name='itemList']") -->
+	 				<input type="hidden" name="itemList" value="[]"/>
+	 				
 	 				<i class="bi bi-cart3 h3 text-white"></i>
+	 				<!-- $("#badgeCount") -->
 	 				<span id="badgeCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
     					0
   					</span>
-  				</a>
+  				</form>
 	 		</div>
  		</div>
  	</div>
