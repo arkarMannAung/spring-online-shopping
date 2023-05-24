@@ -3,20 +3,19 @@
 <head th:replace="fragments/common::head('online shopping')"></head>
 <body>
  	<!-- Header -->
-	<div th:replace="fragments/header::header"></div>
+	<div th:replace="fragments/header::header('[]')"></div>
 	
-
 	<div class="mx-auto w-75 my-4">
 		<div id="hello" class="row">
 			<div class="col-3" th:each=" item : ${items} " th:object="${item}">			
 				<div class="card m-2 border" style="border-radius: 15px;">
-				  <img th:src="*{photoUrl}" class="card-img-top" style="height: 200px;border-radius: 15px 15px 0 0;">
+				  <img th:src="*{photoUrl}" class="card-img-top" style="height: 150px;border-radius: 15px 15px 0 0;">
 				  <div class="card-body">
+				    <p class="card-title d-flex flex-row justify-content-start" th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')} + ' KS'" style="height: 60px;"></p>
 				    <p class="card-title" th:text="*{name}" style="height: 60px;"></p>
-				    <p class="card-title d-flex flex-row justify-content-end" th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')} + ' KS'" style="height: 60px;"></p>
 				    <div class="d-flex flex-row justify-content-center" style="align-item: center;">
-				    	<i class="bi bi-dash-square h3 my-auto" style="cursor: pointer;"></i>
-				    	<div th:badge-id="*{id}" class="my-auto mx-2">0</div>
+				    	<i class="bi bi-dash-square h3 my-auto minus" th:item-id="*{id}" th:item-name="*{name}" th:item-price="*{price}" style="cursor: pointer;"></i>
+				    	<div th:qty-id="*{id}" class="my-auto mx-2">0</div>
 				    	<i class="bi bi-plus-square h3 my-auto plus" th:item-id="*{id}" th:item-name="*{name}" th:item-price="*{price}" style="cursor: pointer;"></i>
 				    </div>
 				  </div>
@@ -25,47 +24,7 @@
 		</div>
 	</div>
 	
-	
-	<script type="text/javascript">
-		$(document).ready(function(){
-			
-			// plus
-			$(".plus").click(function(){
-				const itemId = $(this).attr("item-id");
-				const itemName = $(this).attr("item-name");
-				const itemPrice = $(this).attr("item-price");
-				const badgeCount = $(`div[badge-id="${itemId}"]`);
-				
-			 	const itemListInput = $("input[name='itemList']");
-			 	let itemList = JSON.parse( itemListInput.val() ); // convert to js object   [  ]
-			 	
-				let updatedList;			 	
-			 	
-			 	if(badgeCount.text()==0){  // create new
-			 		const newItem = {
-			 				id: itemId,
-			 				name: itemName,
-			 				price: itemPrice,
-			 				qty: 1,
-			 		};
-			 		updatedList = [ ...itemList, newItem ];
-			 	}else{ // increase qty
-			 		updatedList = itemList.map( ({id,name,price,qty})=>{
-			 			if( id== itemId ){
-			 				return {id,name,price,qty: qty+1};
-			 			}else{
-			 				return {id,name,price,qty};
-			 			}
-			 		} );
-			 	}
-			 	
-			 	// update input
-			 	itemListInput.val( JSON.stringify(updatedList) );
-			 	
-			 	// update badge count
-			 	badgeCount.text( parseInt( badgeCount.text() ) + 1  );
-			})
-		})
-	</script>
+	<!-- jquery -->
+	<script th:replace="fragments/js/jquery_index :: jquery"> </script>
 </body>
 </html>

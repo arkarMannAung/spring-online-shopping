@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common::head('online shopping')"></head>
+<body>
+ 	<!-- Header -->
+	<div th:replace="fragments/header::header( itemList=${itemList} )"></div>
+	
+	<div class="mx-auto w-50 mt-5">
+  		<div class="d-flex flex-row">
+  			<div class="col-1" >#id</div>
+  			<div class="col-4 text-center">Name</div>
+  			<div class="col-2 text-center">Price</div>
+  			<div class="col-3 text-center">Qty</div>
+  			<div class="col-2 d-flex flex-row justify-content-end">Total</div>
+  		</div>
+  	  		
+  		<div id="cartList">
+  			<!-- tableInject here -->
+  		</div>
+			
+  	  </div>
+	
+	<!-- jquery -->
+	<script th:replace="fragments/js/jquery_order :: jquery"> </script>
+</body>
+</html>
+
