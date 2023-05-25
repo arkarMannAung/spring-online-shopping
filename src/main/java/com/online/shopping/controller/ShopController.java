@@ -31,9 +31,10 @@ public class ShopController {
 	
 	@PostMapping("/create/order")
 	public String createOrder(@ModelAttribute OrderForm orderForm, Model model) {
-		
+		if( orderForm.getItemList().equals("[]") || orderForm.getItemList().equals("") ) {
+			return "redirect:/";
+		}
 		model.addAttribute("itemList",orderForm.getItemList());
-		
 		return "screens/order";
 	}
 }

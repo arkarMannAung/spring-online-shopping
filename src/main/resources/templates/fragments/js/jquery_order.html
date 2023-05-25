@@ -4,9 +4,17 @@
 <script th:fragment="jquery">
 
 		const tableInject = (itemList)=>{
+			// is no item auto route to home page
+			if( itemList.length == 0){
+				$("#back").trigger("click");
+				return;
+			}
+			
 			let html = "";
+			let summary = 0;
 			
 		 	itemList.map( ({id,name,price,qty},index)=>{   // 0,1,2,3,4
+		 		summary += (price * qty);
 		 		html += `
 			 		<div class="d-flex flex-row px-3 py-2 ${index%2==0? 'bg-light': 'bg-white'}">
 			  			<div class="col-1" >${id}</div>
@@ -15,7 +23,7 @@
 			  			<div class="col-3 d-flex flex-row justify-content-center" style="align-item: center;">
 					    	<i onclick="minusQty( ${id}, ${qty} )" class="bi bi-dash-square h3 my-auto minus" style="cursor: pointer;"></i>
 					    	<div th:qty-id="*{id}" class="my-auto mx-2">${qty}</div>
-					    	<i class="bi bi-plus-square h3 my-auto plus" item-id="${id}" item-name="${name}" item-price="${price}" style="cursor: pointer;"></i>
+					    	<i onclick="plusQty( ${id}, ${qty} )" class="bi bi-plus-square h3 my-auto plus" style="cursor: pointer;"></i>
 					    </div>
 			  			
 			  			<div class="col-2 d-flex flex-row justify-content-end">${ (price * qty).toLocaleString() } Ks</div>
@@ -28,6 +36,29 @@
 		 	
 		 	// update badge count
 		 	$("#badgeCount").text( itemList.length );
+		 	
+		 	// update summary
+		 	// $("#summary").text(summary.toLocaleString()+ " Ks"); // normal way
+		 	$("#summary").text(  itemList.reduce( (total,{qty:q,price:p})=> total + (p * q),0 ).toLocaleString() + " Ks"); // normal way
+		}
+		
+		const plusQty = (itemId)=>{
+			const itemListInput = $("input[name='itemList']");
+		 	let itemList = JSON.parse( itemListInput.val() );
+		 	
+		 	let updatedList = itemList.map( ({id,name,price,qty})=>{
+	 			if( id == itemId ){
+	 				return { id,name,price,qty: qty + 1 };
+	 			}else{
+	 				return { id,name,price,qty };
+	 			}
+	 		} );
+		 	
+			// update input
+		 	itemListInput.val( JSON.stringify(updatedList) );
+		 	
+		 	// table inject
+		 	tableInject( updatedList );
 		}
 		
 		const minusQty = (itemId,qty)=>{
@@ -57,93 +88,12 @@
 		 	tableInject( updatedList );
 		}
 
-		$(document).ready(function(){	
+		$(document).ready(function(){
 			
 			const itemListInput = $("input[name='itemList']");
-		 	let itemList = JSON.parse( itemListInput.val() ); // convert to js object   [  ]
+		 	let itemList = JSON.parse( itemListInput.val() ); // convert to js object [  ]
 		 	tableInject(itemList);
 		 	
-		 	
-		 	
-			// minus
-			$(".minus").click(function(){
-				const itemId = $(this).attr("item-id");
-				const itemName = $(this).attr("item-name");
-				const itemPrice = $(this).attr("item-price");
-				const qtyDiv = $(`div[qty-id="${itemId}"]`);
-				
-			 	const itemListInput = $("input[name='itemList']");
-			 	let itemList = JSON.parse( itemListInput.val() ); // convert to js object   [  ]
-			 	
-				let updatedList;
-			 	
-			 	// qty should not zero when minus
-			 	if( qtyDiv.text() != 0 ){
-			 		
-			 		// if ( qty == 1) => remove item from input string 
-			 		if( qtyDiv.text() == 1 ){
-			 			updatedList = itemList.filter( (item)=>item.id != itemId );
-			 		}else{ 
-			 		// else qty -1 => update item list to input string
-			 			updatedList = itemList.map( ({id,name,price,qty})=>{
-				 			if( id == itemId ){
-				 				return { id,name,price,qty: qty - 1 };
-				 			}else{
-				 				return { id,name,price,qty };
-				 			}
-				 		} );
-			 		}
-			 		// update input
-				 	itemListInput.val( JSON.stringify(updatedList) );
-				 	
-				 	// update qty
-				 	qtyDiv.text( parseInt( qtyDiv.text() ) - 1  );
-				 	
-				 	// update badge count
-				 	$("#badgeCount").text( updatedList.length );
-			 	}
-			})
-			
-			
-			// plus
-			$(".plus").click(function(){
-				const itemId = $(this).attr("item-id");
-				const itemName = $(this).attr("item-name");
-				const itemPrice = $(this).attr("item-price");
-				const qtyDiv = $(`div[qty-id="${itemId}"]`);
-				
-			 	const itemListInput = $("input[name='itemList']");
-			 	let itemList = JSON.parse( itemListInput.val() ); // convert to js object   [  ]
-			 	
-				let updatedList;			 	
-			 	
-			 	if(qtyDiv.text()==0){  // create new
-			 		const newItem = {
-			 				id: itemId,
-			 				name: itemName,
-			 				price: itemPrice,
-			 				qty: 1,
-			 		};
-			 		updatedList = [ ...itemList, newItem ];
-			 	}else{ // increase qty
-			 		updatedList = itemList.map( ({id,name,price,qty})=>{
-			 			if( id== itemId ){
-			 				return {id,name,price,qty: qty+1};
-			 			}else{
-			 				return {id,name,price,qty};
-			 			}
-			 		} );
-			 	}
-			 	
-			 	// update input
-			 	itemListInput.val( JSON.stringify(updatedList) );
-			 	
-			 	// update qty
-			 	qtyDiv.text( parseInt( qtyDiv.text() ) + 1  );
-			 	
-			 	// update badge count
-			 	$("#badgeCount").text( updatedList.length );
-			})
 		})
 	</script>
 </html>
