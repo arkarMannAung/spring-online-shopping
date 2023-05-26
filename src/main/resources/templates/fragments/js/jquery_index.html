@@ -2,7 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <script th:fragment="jquery">
-		$(document).ready(function(){	
+		$(document).ready(function(){
+			
+			// error => show model
+			if( $("#err_msg").val() ){
+				$("#loginModal").modal('show');
+			}
+			
 			// minus
 			$(".minus").click(function(){
 				const itemId = $(this).attr("item-id");

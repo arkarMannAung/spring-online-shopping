@@ -2,8 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/common::head('online shopping')"></head>
 <body>
+ 	<!-- msg reciever -->
+ 	<input id="err_msg" type="hidden" th:value="${err_msg}">
+ 	
  	<!-- Header -->
-	<div th:replace="fragments/header::header('[]')"></div>
+	<div th:replace="fragments/header :: header('[]')"></div>
 	
 	<div class="mx-auto w-75 my-4">
 		<div id="hello" class="row">
@@ -23,6 +26,9 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Modal -->
+	<div th:replace="fragments/modal/login_modal :: loginModal"></div>
 	
 	<!-- jquery -->
 	<script th:replace="fragments/js/jquery_index :: jquery"> </script>

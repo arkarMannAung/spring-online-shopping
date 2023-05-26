@@ -20,7 +20,7 @@ Create Table users (
 	email varchar(199) unique NOT NULL,
 	password text NOT NULL,
 	address text NOT NULL,
-	role_id int,
+	role_id int Default 2,
 	created_at timestamp Default now(),
 	updated_at timestamp Default now(), 	
 	PRIMARY KEY(id)

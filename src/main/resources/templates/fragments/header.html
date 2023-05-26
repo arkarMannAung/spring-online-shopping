@@ -12,13 +12,17 @@
 	 				<!-- add to cart reciever input $("input[name='itemList']") -->
 	 				<input type="hidden" name="itemList" th:value="${itemList}"/>
 	 				<button class="btn btn-outline" type="submit">
-	 					<i class="bi bi-cart3 h3 text-white"></i>
-	 					<!-- $("#badgeCount") -->
-	 					<span id="badgeCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+	 					<span id="badgeCount" style="top: 10px;left: 0px;" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
     						0
   						</span>
+	 					<i class="bi bi-cart3 h3 text-white"></i>		
   					</button>
   				</form>
+  				
+  				<div onclick="$('#loginModal').modal('show')" class="my-auto d-flex flex-row text-white" style="margin-left: 40px;text-decoration: none;cursor: pointer;">
+  					<i class="bi bi-person-circle h4 my-auto"></i>
+  					<span class="my-auto" style="margin-left: 20px;">Login</span>
+  				</div>
 	 		</div>
  		</div>
  	</div>
