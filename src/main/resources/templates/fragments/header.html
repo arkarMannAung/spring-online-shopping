@@ -19,9 +19,13 @@
   					</button>
   				</form>
   				
-  				<div onclick="$('#loginModal').modal('show')" class="my-auto d-flex flex-row text-white" style="margin-left: 40px;text-decoration: none;cursor: pointer;">
+  				<div th:if="${Auth == null}" onclick="$('#loginModal').modal('show')" class="my-auto d-flex flex-row text-white" style="margin-left: 40px;text-decoration: none;cursor: pointer;">
   					<i class="bi bi-person-circle h4 my-auto"></i>
   					<span class="my-auto" style="margin-left: 20px;">Login</span>
+  				</div>
+  				<div th:unless="${Auth == null}" class="my-auto d-flex flex-row text-white" style="margin-left: 40px;text-decoration: none;cursor: pointer;">
+  					<span class="my-auto" th:text="${Auth.username}" style="margin-right: 20px;"></span>
+  					<i class="bi bi-box-arrow-right"></i>
   				</div>
 	 		</div>
  		</div>

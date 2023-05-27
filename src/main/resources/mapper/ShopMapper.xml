@@ -14,4 +14,17 @@
 		SELECT * FROM items;
 	</select>
 	
+	<resultMap type="com.online.shopping.entity.UserEntity" id="userResultMap">
+		<id column="id" property="id"></id>
+		<result column="username" property="username"></result>
+		<result column="email" property="email"></result>
+		<result column="address" property="address"></result>
+		<result column="role_id" property="roleId"></result>
+	</resultMap>
+	
+	<select id="login" resultMap="userResultMap">
+		SELECT id,username,email,address,role_id FROM users
+		WHERE email=#{email} AND password=#{password}
+	</select>
+	
 </mapper>

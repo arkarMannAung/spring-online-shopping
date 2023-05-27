@@ -79,7 +79,7 @@ VALUES
 INSERT INTO users(username,email,password,address)
 VALUES
 ('Ma Ma','mama@gmail.com','1234','Hlaing Thar Yar'),
-('Mg Mg','mgmg@gmail.com','1234','Inn Sein');
+('Mg Mg','mgmg@gmail.com','1235','Inn Sein');
 
 INSERT INTO divisions(name)
 VALUES
