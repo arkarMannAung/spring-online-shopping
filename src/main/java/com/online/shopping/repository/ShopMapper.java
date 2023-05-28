@@ -17,4 +17,6 @@ public interface ShopMapper {
 	public UserEntity login(LoginForm loginUser);
 	
 	public UserEntity login(@Param("email") String email,@Param("password") String password);
+	
+	public boolean isEmailSatisfy(@Param("email") String email);
 }

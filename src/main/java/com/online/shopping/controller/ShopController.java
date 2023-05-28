@@ -61,6 +61,18 @@ public class ShopController {
 		return "redirect:/";
 	}
 	
+	@GetMapping("/signup")
+	public String signup(Model model, HttpSession session) {
+		model.addAttribute("Auth", commonService.checkAuth(session) );
+		return "screens/signup";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("Auth");
+		return "redirect:/";
+	}
+	
 	@PostMapping("/create/order")
 	public String createOrder(@ModelAttribute OrderForm orderForm, Model model,HttpSession session) {
 		if( orderForm.getItemList().equals("[]") || orderForm.getItemList().equals("") ) {

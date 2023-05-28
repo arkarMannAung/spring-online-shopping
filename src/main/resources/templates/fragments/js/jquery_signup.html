@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<script th:fragment="jquery">
+	$(document).ready(function(){
+		
+		// initail animation
+		$(".progress-bar").animate({
+			width: "0%"
+		},2000);
+		
+		// is email satisfy
+		$("#email").on("focusout",async function(){
+			// email_ok
+			// 
+			const email = $(this).val();
+			const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			// null check
+			if( !email ){
+				$("#email_err").text("email is required!");
+			// check mail format
+			}else if( !email.match(mailFormat) ){
+				$("#email_err").text("Error Wrong Email Format!");
+			// check email satisfy by api
+			}else{
+				$.ajax({
+					url: `/check-email/${email}`
+				})
+				.then((response)=>{
+					console.log( response );
+					$("#email_ok").show(1000);
+					$("#email_err").hide(1000);
+					return;
+				})
+				.catch(( {responseText} )=>{
+					$("#email_err").text( responseText );
+				})
+			}
+			
+			$("#email_err").show(1000);
+			$("#email_ok").hide(1000);
+		});
+		
+		// keydown event listener
+		$(".password-field").on("keyup",function(){
+			const progressBar = $( $(this).attr("data-target") );
+			const value = $(this).val();
+			
+			const strong = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+
+			
+			// lower then len 8
+			if(value.length < 8){
+				progressBar.css("background-color","red");
+				progressBar.animate({
+					width: "30%"
+				},300);
+			// more len 7 and number and special and capital
+			}else if(value.length > 7 && value.match(strong) ){
+				progressBar.css("background-color","green");
+				progressBar.animate({
+					width: "100%"
+				},300);
+			// more len 7 and number
+			}else if( value.length > 7 && value.match(/[0-9]/) ){
+				progressBar.css("background-color","yellow");
+				progressBar.animate({
+					width: "50%"
+				},300);
+			}
+		})
+		
+		// password show / hide
+		$(".eye-toggle").on("click",function(){
+			const input = $( $(this).attr("data-target") );
+			if( input.attr("type")=="password" ){
+				$(this).attr("class","eye-toggle bi bi-eye-fill h3 px-2 my-auto");
+				input.attr("type","text");
+			}else{
+				$(this).attr("class","eye-toggle bi bi-eye-slash h3 px-2 my-auto");
+				input.attr("type","password");
+			}
+		});
+	})
+</script>
+</html>

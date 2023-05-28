@@ -27,4 +27,12 @@
 		WHERE email=#{email} AND password=#{password}
 	</select>
 	
+	<select id="isEmailSatisfy" resultType="boolean">
+		SELECT 
+		CASE WHEN COUNT(*) = 0 THEN TRUE
+		ELSE FALSE END AS "is_email_satisfy"
+		FROM users
+		WHERE email = #{email}
+	</select>
+	
 </mapper>

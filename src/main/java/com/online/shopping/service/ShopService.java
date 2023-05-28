@@ -40,4 +40,8 @@ public class ShopService {
 		// business logic here
 		return this.shopMapper.login( email, password );
 	}
+	
+	public boolean isEmailSatisfy(String email) {
+		return this.shopMapper.isEmailSatisfy(email);
+	}
 }
