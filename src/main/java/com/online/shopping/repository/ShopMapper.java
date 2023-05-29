@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.online.shopping.entity.DivisionEntity;
 import com.online.shopping.entity.ItemEntity;
 import com.online.shopping.entity.UserEntity;
 import com.online.shopping.form.LoginForm;
@@ -19,4 +20,6 @@ public interface ShopMapper {
 	public UserEntity login(@Param("email") String email,@Param("password") String password);
 	
 	public boolean isEmailSatisfy(@Param("email") String email);
+	
+	public List<DivisionEntity> getDivisions();
 }

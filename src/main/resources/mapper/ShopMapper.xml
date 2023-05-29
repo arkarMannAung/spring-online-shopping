@@ -35,4 +35,8 @@
 		WHERE email = #{email}
 	</select>
 	
+	<select id="getDivisions" resultType="com.online.shopping.entity.DivisionEntity">
+		SELECT * FROM divisions;
+	</select>
+	
 </mapper>

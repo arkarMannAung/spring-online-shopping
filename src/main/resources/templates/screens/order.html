@@ -27,10 +27,16 @@
 				<!-- inject Summary -->
 			</div>
 		</div>
+		<div id="create-order" class="d-flex flex-row justify-content-center mt-5">
+			<button class="btn btn-primary">Create Order</button>
+		</div>
   	  </div>
 	
 	<!-- jquery -->
 	<script th:replace="fragments/js/jquery_order :: jquery"> </script>
+	
+	<!-- Model -->
+	<div th:replace="fragments/modal/order_confirm_modal :: OrderConfirmModal"></div>
 </body>
 </html>
 

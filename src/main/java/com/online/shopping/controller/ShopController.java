@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.online.shopping.entity.UserEntity;
+import com.online.shopping.form.ConfirmOrderForm;
 import com.online.shopping.form.LoginForm;
 import com.online.shopping.form.OrderForm;
 import com.online.shopping.service.CommonService;
@@ -30,12 +31,7 @@ public class ShopController {
 	
 	@PostConstruct
 	public void init() {
-		
-//		LoginForm loginUser = new LoginForm();
-//		loginUser.setEmail("mama@gmail.com");
-//		loginUser.setPassword("1234");
-//		
-//		System.out.println( this.shopService.login( loginUser ) );
+//		System.out.println( this.shopService.getDivisions() );
 	}
 	
 	@GetMapping("/")
@@ -80,8 +76,36 @@ public class ShopController {
 		}
 		model.addAttribute("Auth", commonService.checkAuth(session) );
 		model.addAttribute("itemList",orderForm.getItemList());
+		ConfirmOrderForm confirmOrderForm = new ConfirmOrderForm();
+		confirmOrderForm.setDivisionList( this.shopService.getDivisions() );
+		model.addAttribute("confirmOrderForm",confirmOrderForm);
 		return "screens/order";
 	}
 	
+	@PostMapping("/confirm/order")
+	public String confirmOrder( @ModelAttribute ConfirmOrderForm confirmOrderForm ) {
+		OrderForm orderForm = new OrderForm();
+		orderForm.setItemList( confirmOrderForm.getItemList() );
+		
+		System.out.println( orderForm.toList() );
+		return "redirect:/";
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

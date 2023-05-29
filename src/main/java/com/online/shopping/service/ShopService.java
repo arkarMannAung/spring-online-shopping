@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.online.shopping.entity.DivisionEntity;
 import com.online.shopping.entity.ItemEntity;
 import com.online.shopping.entity.UserEntity;
 import com.online.shopping.form.LoginForm;
@@ -43,5 +44,9 @@ public class ShopService {
 	
 	public boolean isEmailSatisfy(String email) {
 		return this.shopMapper.isEmailSatisfy(email);
+	}
+	
+	public List<DivisionEntity> getDivisions(){
+		return this.shopMapper.getDivisions();
 	}
 }

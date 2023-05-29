@@ -94,6 +94,12 @@
 		 	let itemList = JSON.parse( itemListInput.val() ); // convert to js object [  ]
 		 	tableInject(itemList);
 		 	
+		 	// confirm order 
+		 	$("#create-order").click(function(){
+		 		$('div > input[name=itemList]').val( $('form > input[name=itemList]').val() )
+		 		$('#OrderConfirmModal').modal('show');
+		 	})
+		 	
 		})
 	</script>
 </html>
