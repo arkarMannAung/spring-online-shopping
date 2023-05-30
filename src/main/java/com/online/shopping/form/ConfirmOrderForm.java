@@ -21,4 +21,5 @@ public class ConfirmOrderForm {
 	private int userId;
 	private String itemList;
 	private List<DivisionEntity> divisionList;
+	private int locationId; // must generate
 }

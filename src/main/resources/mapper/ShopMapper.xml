@@ -39,4 +39,15 @@
 		SELECT * FROM divisions;
 	</select>
 	
+	<select id="createOrder" resultType="int">
+		INSERT INTO orders(receiver_name,receiver_phone,receiver_address,user_id,division_id)
+		VALUES (#{receiverName},#{receiverPhone},#{receiverAddress},#{userId},#{locationId});
+		SELECT max(id) FROM orders;
+	</select>
+	
+	<insert id="createOrderDetail">
+		INSERT INTO order_details(quantity,order_id,item_id)
+		VALUES (#{qty},#{orderId},#{itemId});
+	</insert>
+	
 </mapper>

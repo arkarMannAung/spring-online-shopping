@@ -4,17 +4,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.ui.Model;
 
 import com.online.shopping.entity.DivisionEntity;
 import com.online.shopping.entity.ItemEntity;
 import com.online.shopping.entity.UserEntity;
+import com.online.shopping.form.ConfirmOrderForm;
+import com.online.shopping.form.ItemOrderModel;
 import com.online.shopping.form.LoginForm;
+import com.online.shopping.form.OrderForm;
 import com.online.shopping.repository.ShopMapper;
 
 import jakarta.servlet.http.HttpSession;
 
 @Service
+@Transactional
 public class ShopService {
 	
 	@Autowired
@@ -49,4 +55,28 @@ public class ShopService {
 	public List<DivisionEntity> getDivisions(){
 		return this.shopMapper.getDivisions();
 	}
+	
+	public void createOrder( ConfirmOrderForm confirmOrderForm ) {
+		OrderForm orderForm = new OrderForm();
+		orderForm.setItemList( confirmOrderForm.getItemList() );
+		List<ItemOrderModel> orderDetails = orderForm.toList();
+		try {
+			int orderId = this.shopMapper.createOrder(confirmOrderForm);
+			for ( ItemOrderModel order : orderDetails ) {
+				this.shopMapper.createOrderDetail( order.getQty(), orderId, order.getId() );
+			}
+		}catch (Exception e) {
+			System.out.println("#Error");
+			TransactionInterceptor.currentTransactionStatus().setRollbackOnly();
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 }

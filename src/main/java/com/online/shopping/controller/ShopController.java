@@ -71,6 +71,10 @@ public class ShopController {
 	
 	@PostMapping("/create/order")
 	public String createOrder(@ModelAttribute OrderForm orderForm, Model model,HttpSession session) {
+		UserEntity authUser = (UserEntity) session.getAttribute("Auth");
+		if( authUser == null ) {
+			return "redirect:/";
+		}
 		if( orderForm.getItemList().equals("[]") || orderForm.getItemList().equals("") ) {
 			return "redirect:/";
 		}
@@ -83,11 +87,13 @@ public class ShopController {
 	}
 	
 	@PostMapping("/confirm/order")
-	public String confirmOrder( @ModelAttribute ConfirmOrderForm confirmOrderForm ) {
-		OrderForm orderForm = new OrderForm();
-		orderForm.setItemList( confirmOrderForm.getItemList() );
+	public String confirmOrder( @ModelAttribute ConfirmOrderForm confirmOrderForm, HttpSession session ) {
+		UserEntity authUser = (UserEntity) session.getAttribute("Auth");
+		confirmOrderForm.setUserId( authUser.getId() );
+		confirmOrderForm.setLocationId( Integer.parseInt(confirmOrderForm.getDivisionId()) );
 		
-		System.out.println( orderForm.toList() );
+		this.shopService.createOrder(confirmOrderForm);
+		
 		return "redirect:/";
 	}
 
