@@ -2,52 +2,123 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.online.shopping.repository.ShopMapper">
 
-	<resultMap type="com.online.shopping.entity.ItemEntity" id="itemResultMap">
+	<resultMap type="com.online.shopping.entity.ItemEntity"
+		id="itemResultMap">
 		<id column="id" property="id"></id>
 		<result column="name" property="name"></result>
 		<result column="price" property="price"></result>
 		<result column="photo_url" property="photoUrl"></result>
 		<result column="category_id" property="categoryId"></result>
 	</resultMap>
-	
+
 	<select id="getAllItem" resultMap="itemResultMap">
 		SELECT * FROM items;
 	</select>
-	
-	<resultMap type="com.online.shopping.entity.UserEntity" id="userResultMap">
+
+	<resultMap type="com.online.shopping.entity.UserEntity"
+		id="userResultMap">
 		<id column="id" property="id"></id>
 		<result column="username" property="username"></result>
 		<result column="email" property="email"></result>
 		<result column="address" property="address"></result>
 		<result column="role_id" property="roleId"></result>
 	</resultMap>
-	
+
 	<select id="login" resultMap="userResultMap">
-		SELECT id,username,email,address,role_id FROM users
-		WHERE email=#{email} AND password=#{password}
+		SELECT
+		id,username,email,address,role_id FROM users
+		WHERE email=#{email} AND
+		password=#{password}
 	</select>
-	
+
 	<select id="isEmailSatisfy" resultType="boolean">
-		SELECT 
-		CASE WHEN COUNT(*) = 0 THEN TRUE
+		SELECT
+		CASE WHEN COUNT(*)
+		= 0 THEN TRUE
 		ELSE FALSE END AS "is_email_satisfy"
-		FROM users
-		WHERE email = #{email}
+		FROM
+		users
+		WHERE email
+		= #{email}
 	</select>
-	
-	<select id="getDivisions" resultType="com.online.shopping.entity.DivisionEntity">
+
+	<select id="getDivisions"
+		resultType="com.online.shopping.entity.DivisionEntity">
 		SELECT * FROM divisions;
 	</select>
-	
+
 	<select id="createOrder" resultType="int">
-		INSERT INTO orders(receiver_name,receiver_phone,receiver_address,user_id,division_id)
-		VALUES (#{receiverName},#{receiverPhone},#{receiverAddress},#{userId},#{locationId});
+		INSERT INTO
+		orders(receiver_name,receiver_phone,receiver_address,user_id,division_id)
+		VALUES
+		(#{receiverName},#{receiverPhone},#{receiverAddress},#{userId},#{locationId});
 		SELECT max(id) FROM orders;
 	</select>
-	
+
 	<insert id="createOrderDetail">
 		INSERT INTO order_details(quantity,order_id,item_id)
 		VALUES (#{qty},#{orderId},#{itemId});
 	</insert>
-	
+
+	<resultMap id="userOrderResultMap"
+		type="com.online.shopping.entity.UserOrderEntity">
+		<id column="id" property="orderId"></id>
+		<result column="receiver_name" property="receiverName"></result>
+		<result column="receiver_phone" property="receiverPhone"></result>
+		<result column="receiver_address" property="receiverAddress"></result>
+		<result column="total" property="total"></result>
+	</resultMap>
+
+	<select id="getUserOrder" resultMap="userOrderResultMap">
+		SELECT o.id,
+		o.receiver_name, o.receiver_phone,
+		o.receiver_address, SUM(d.quantity *
+		i.price) total
+		FROM orders o, order_details d, items i
+		WHERE
+		o.user_id =
+		#{userId} AND
+		o.id = d.order_id AND
+		i.id = d.item_id
+		GROUP BY o.id,
+		o.receiver_name, o.receiver_phone, o.receiver_address
+		ORDER BY
+		o.updated_at
+	</select>
+
+	<select id="getOrderDetail" resultType="com.online.shopping.entity.OrderDetailEntity">
+		SELECT i.id,i.name, d.quantity, i.price
+		FROM order_details d, items i
+		WHERE d.order_id = #{orderId} AND d.item_id = i.id
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </mapper>

@@ -2,6 +2,7 @@ package com.online.shopping.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,9 @@ import org.springframework.ui.Model;
 
 import com.online.shopping.entity.DivisionEntity;
 import com.online.shopping.entity.ItemEntity;
+import com.online.shopping.entity.OrderDetailEntity;
 import com.online.shopping.entity.UserEntity;
+import com.online.shopping.entity.UserOrderEntity;
 import com.online.shopping.form.ConfirmOrderForm;
 import com.online.shopping.form.ItemOrderModel;
 import com.online.shopping.form.LoginForm;
@@ -56,7 +59,7 @@ public class ShopService {
 		return this.shopMapper.getDivisions();
 	}
 	
-	public void createOrder( ConfirmOrderForm confirmOrderForm ) {
+	public boolean createOrder( ConfirmOrderForm confirmOrderForm ) {
 		OrderForm orderForm = new OrderForm();
 		orderForm.setItemList( confirmOrderForm.getItemList() );
 		List<ItemOrderModel> orderDetails = orderForm.toList();
@@ -65,16 +68,23 @@ public class ShopService {
 			for ( ItemOrderModel order : orderDetails ) {
 				this.shopMapper.createOrderDetail( order.getQty(), orderId, order.getId() );
 			}
+			return true;
 		}catch (Exception e) {
 			System.out.println("#Error");
 			TransactionInterceptor.currentTransactionStatus().setRollbackOnly();
+			return false;
 		}
 		
 		
 	}
 	
+	public List<UserOrderEntity> getUserOrder(int userId){
+		return this.shopMapper.getUserOrder(userId);
+	}
 	
-	
+	public List<OrderDetailEntity> getOrderDetail(int orderId){
+		return this.shopMapper.getOrderDetail(orderId);
+	}
 	
 	
 	

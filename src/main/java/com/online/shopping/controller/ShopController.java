@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.online.shopping.entity.UserEntity;
@@ -31,7 +32,7 @@ public class ShopController {
 	
 	@PostConstruct
 	public void init() {
-//		System.out.println( this.shopService.getDivisions() );
+//		System.out.println(  );
 	}
 	
 	@GetMapping("/")
@@ -95,6 +96,29 @@ public class ShopController {
 		this.shopService.createOrder(confirmOrderForm);
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping("/order")
+	public String orderHistory(Model model, HttpSession session) {
+		UserEntity authUser = commonService.checkAuth(session);
+		if( authUser == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("Auth", authUser );
+		model.addAttribute("userOrderList", this.shopService.getUserOrder(authUser.getId()) );
+		return "/screens/order_history";
+	}
+	
+	@GetMapping("order/deatil/{orderId}")
+	public String orderDetail(@PathVariable int orderId,Model model, HttpSession session) {
+//		System.out.println( this.shopService.getOrderDetail(orderId) );
+		UserEntity authUser = commonService.checkAuth(session);
+		if( authUser == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("Auth", authUser );
+		 model.addAttribute("orderDetailList", this.shopService.getOrderDetail(orderId));
+		return "/screens/order_detail";
 	}
 
 }

@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.online.shopping.entity.DivisionEntity;
 import com.online.shopping.entity.ItemEntity;
+import com.online.shopping.entity.OrderDetailEntity;
 import com.online.shopping.entity.UserEntity;
+import com.online.shopping.entity.UserOrderEntity;
 import com.online.shopping.form.ConfirmOrderForm;
 import com.online.shopping.form.LoginForm;
 
@@ -27,4 +29,8 @@ public interface ShopMapper {
 	public int createOrder( ConfirmOrderForm confirmOrderForm );
 	
 	public void createOrderDetail( @Param("qty") int qty, @Param("orderId") int orderId, @Param("itemId") int itemId );
+	
+	public List<UserOrderEntity> getUserOrder(@Param("userId") int userId);
+	
+	public List<OrderDetailEntity> getOrderDetail(@Param("orderId") int orderId);
 }
